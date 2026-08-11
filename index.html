@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="id-ID">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kalkulator Investasi — Waralaba Maxim</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar no-print topbar-compact">
+      <div class="app-brand app-brand-top"><img src="assets/maxim-logo.svg" alt="Maxim" class="brand-logo" /></div>
+      <div id="topbarCityMeta" class="topbar-city-meta"></div>
+      <div class="actions-strip actions-strip-compact">
+        <label class="language-control language-control-top" for="languageSelect">
+          <span class="language-control-label" data-i18n="language">Язык</span>
+          <select id="languageSelect" aria-label="Язык">
+            <option value="id-ID">🇮🇩 Bahasa Indonesia</option>
+            <option value="en-US">🇺🇸 English</option>
+          </select>
+        </label>
+        <div class="top-action-pair" role="group" aria-label="Управление калькулятором">
+          <button id="parametersBtn" class="btn icon-btn parameters-trigger top-action-btn top-action-parameters" type="button" title="Параметры" aria-label="Параметры" data-i18n-title="parameters" data-i18n-aria="parameters">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h10M18 7h2M4 17h2M10 17h10M8 4v6M16 14v6"/>
+              <circle cx="8" cy="7" r="2"/><circle cx="16" cy="17" r="2"/>
+            </svg>
+            <span class="top-action-label" data-i18n="parameters">Параметры</span>
+          </button>
+          <button id="changeCityBtn" class="btn icon-btn top-action-btn top-action-city" type="button" title="Сменить кечематан" aria-label="Сменить кечематан" data-i18n-title="changeCity" data-i18n-aria="changeCity">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/>
+              <path d="M9 3v15"/>
+              <path d="M15 6v15"/>
+              <circle cx="15" cy="10" r="2.2"/>
+              <path d="M15 12.2c1.4-1.3 2.4-2.6 2.4-3.9A2.4 2.4 0 0 0 15 5.9a2.4 2.4 0 0 0-2.4 2.4c0 1.3 1 2.6 2.4 3.9z"/>
+            </svg>
+            <span class="top-action-label" data-i18n="changeCity">Сменить кечематан</span>
+          </button>
+          <a id="topWhatsAppCta" class="btn icon-btn top-action-btn top-action-whatsapp" href="https://wa.me/6282372518410" target="_blank" rel="noopener noreferrer" aria-label="Связаться через WhatsApp" data-i18n-aria="contactInWhatsApp">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M8.2 8.1c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.8c-.2.2-.1.5.1.8.6 1 1.5 1.8 2.5 2.3.3.2.6.2.8 0l.8-1c.2-.3.4-.3.7-.2l1.8.8c.3.1.4.3.4.5 0 .5-.2 1.3-.6 1.7-.5.5-1.3.8-2.1.7-1.2-.2-2.7-.7-4.4-2.2-2-1.7-3.1-3.8-3.4-5.1-.2-.7 0-1.2.3-1.5z"/></svg>
+            <span class="top-action-label" data-i18n="whatsApp">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+
+    <section id="startScreen" class="start-screen no-print">
+      <div class="start-card">
+        <div class="start-head">
+          <label class="language-control language-control-start" for="startLanguageSelect">
+            <span class="language-control-label" data-i18n="language">Язык</span>
+            <select id="startLanguageSelect" aria-label="Язык">
+              <option value="id-ID">🇮🇩 Bahasa Indonesia</option>
+              <option value="en-US">🇺🇸 English</option>
+            </select>
+          </label>
+          <div class="start-brand-copy start-brand-centered">
+            <img src="assets/maxim-logo.svg" alt="Maxim" class="start-logo" />
+            <div class="start-copy-text">
+              <h1 data-i18n="welcomeTitle">Выберите кечематан для расчёта инвестиций</h1>
+              <p data-i18n="welcomeSubtitle">Выберите провинцию и кечематан. Численность населения и паушальный взнос будут подставлены автоматически.</p>
+            </div>
+          </div>
+          
+        </div>
+        <div class="city-picker-panel">
+          <div class="city-field">
+            <label for="startStateSelect" data-i18n="state">Провинция</label>
+            <select id="startStateSelect"></select>
+          </div>
+          <div class="city-field">
+            <label for="startCitySelect" data-i18n="city">Кечематан</label>
+            <select id="startCitySelect"></select>
+          </div>
+          <button id="startCalculateBtn" class="btn primary start-calc-btn" data-i18n="calculate">Рассчитать</button>
+        </div>
+
+        <div class="admin-access-block">
+          <button class="btn admin-login-button" type="button" data-admin-login data-i18n="adminLoginButton">Вход для администратора</button>
+          <div class="admin-session-bar" data-admin-session hidden>
+            <div>
+              <strong data-i18n="adminMode">Режим администратора</strong>
+              <small data-i18n="adminManageKecamatan">Управление кечематанами</small>
+            </div>
+            <div class="admin-session-actions">
+              <button class="btn primary admin-manage-button" type="button" data-open-admin-cities data-i18n="openPanel">Открыть панель</button>
+              <button class="admin-logout-button" type="button" data-admin-logout data-i18n="logout">Выйти</button>
+            </div>
+          </div>
+        </div>
+        <div class="city-table-card">
+          <div class="city-table-title" data-i18n="availableCities">Доступные кечематаны</div>
+          <div class="city-table-wrap">
+            <table class="city-table" id="cityTable"></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main id="dashboard" class="dashboard-card">
+      <section class="hero-row">
+        <div class="title-block title-block-branded">
+          <div class="dashboard-title-line"><div><h1 data-i18n="title">ФИНАНСОВАЯ МОДЕЛЬ — ИНДОНЕЗИЯ</h1>
+          <p data-i18n="subtitle">Прогноз на 12 месяцев</p><p class="scenario-disclaimer" data-i18n="scenarioDisclaimer">Сценарный прогноз, а не гарантия результата.</p></div></div>
+          <div id="selectedCityBanner" class="selected-city-banner"></div>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+      </section>
+
+      <section class="main-grid">
+        <div class="model-column">
+          <div class="model-table-wrap">
+            <table class="model-table" id="modelTable"></table>
+          </div>
+        </div>
+        <aside class="sidebar">
+          <section class="side-card chart-card">
+            <div class="chart-card-head">
+              <h3 data-i18n="cashFlowOverview">ДИНАМИКА ДЕНЕЖНОГО ПОТОКА</h3>
+              <button id="openChartModal" class="chart-expand-btn" type="button" title="Открыть крупный график" aria-label="Открыть крупный график" data-i18n-title="openLargeChart" data-i18n-aria="openLargeChart">⤢</button>
+            </div>
+            <div class="chart-box" id="cashFlowChartBox">
+              <canvas id="cashFlowChart"></canvas>
+            </div>
+            <div id="chartLegendInline" class="chart-legend-inline chart-legend-below" aria-label="Управление рядами графика"></div>
+          </section>
+          <section class="side-card insights-card">
+            <h3 data-i18n="keyInsights">КЛЮЧЕВЫЕ ВЫВОДЫ</h3>
+            <div id="insightsList"></div>
+          </section>
+          <section class="side-card summary-card scenario-notes-host">
+            <h3><span data-i18n="summary12">ИТОГИ ЗА 12 МЕСЯЦЕВ</span></h3>
+            <div id="summaryList"></div>
+            <div class="notes-popover">
+              <div class="notes-popover-title" data-i18n="notes">ЗАМЕТКИ</div>
+              <textarea id="notesArea" spellcheck="true"></textarea>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+
+  <section id="mobileApp" class="mobile-app-shell" aria-label="Мобильный калькулятор инвестиций">
+    <section id="mobileStartScreen" class="mobile-screen mobile-start-only">
+      
+      <div class="mobile-start-card">
+        <label class="language-control language-control-mobile" for="mobileLanguageSelect">
+          <span class="language-control-label" data-i18n="language">Язык</span>
+          <select id="mobileLanguageSelect" aria-label="Язык">
+            <option value="id-ID">🇮🇩 Bahasa Indonesia</option>
+            <option value="en-US">🇺🇸 English</option>
+          </select>
+        </label>
+        <div class="mobile-start-title" data-i18n="welcomeTitle">Выберите кечематан для расчёта инвестиций</div>
+        <div class="mobile-start-subtitle" data-i18n="welcomeSubtitle">Выберите провинцию и кечематан. Численность населения и паушальный взнос будут подставлены автоматически.</div>
+        <div class="mobile-city-fields">
+          <div class="mobile-field">
+            <label for="mobileStateSelect" data-i18n="state">Провинция</label>
+            <select id="mobileStateSelect"></select>
+          </div>
+          <div class="mobile-field">
+            <label for="mobileCitySelect" data-i18n="city">Кечематан</label>
+            <select id="mobileCitySelect"></select>
+          </div>
+          <button id="mobileCalculateBtn" class="mobile-primary-btn" type="button" data-i18n="calculate">Рассчитать</button>
+        </div>
+        <div class="admin-access-block admin-access-mobile">
+          <button class="admin-login-button mobile-admin-login-button" type="button" data-admin-login data-i18n="adminLoginButton">Вход для администратора</button>
+          <div class="admin-session-bar" data-admin-session hidden>
+            <div>
+              <strong data-i18n="adminMode">Режим администратора</strong>
+              <small data-i18n="adminManageKecamatan">Управление кечематанами</small>
+            </div>
+            <div class="admin-session-actions">
+              <button class="mobile-primary-btn admin-manage-button" type="button" data-open-admin-cities data-i18n="openPanel">Открыть панель</button>
+              <button class="admin-logout-button" type="button" data-admin-logout data-i18n="logout">Выйти</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="mobileKpiScreen" class="mobile-screen mobile-calc-screen" data-mobile-page="kpi">
+      <div class="mobile-screen-actions">
+        <label class="mobile-dashboard-language" for="mobileDashboardLanguageSelect">
+          <span class="sr-only" data-i18n="language">Язык</span>
+          <select id="mobileDashboardLanguageSelect" aria-label="Язык">
+            <option value="id-ID" title="Bahasa Indonesia">🇮🇩 ID</option>
+            <option value="en-US" title="English">🇬🇧 EN</option>
+          </select>
+        </label>
+        <button id="mobileParametersBtn" class="mobile-icon-action mobile-parameters-action mobile-action-pill mobile-action-parameters" type="button" aria-label="Параметры">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M8 4v6M16 14v6"/><circle cx="8" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>
+          <span class="mobile-action-label" data-i18n="parameters">Параметры</span>
+        </button>
+        <button id="mobileChangeCityBtn" class="mobile-icon-action mobile-action-pill mobile-action-city" type="button" aria-label="Сменить кечематан">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/><circle cx="15" cy="10" r="2.2"/></svg>
+          <span class="mobile-action-label" data-i18n="changeCity">Сменить кечематан</span>
+        </button>
+      </div>
+      <div id="mobileKpiContent" class="mobile-kpi-content"></div>
+      <section id="mobileFinancialOverview" class="mobile-financial-overview" aria-label="Краткая финансовая таблица"></section>
+      <button class="mobile-arrow mobile-arrow-next" type="button" data-mobile-page-target="chart" aria-label="Далее">↓</button>
+    </section>
+
+    <section id="mobileChartScreen" class="mobile-screen mobile-calc-screen" data-mobile-page="chart">
+      <button class="mobile-arrow mobile-arrow-prev" type="button" data-mobile-page-target="kpi" aria-label="Назад">↑</button>
+      <div class="mobile-chart-card">
+        <h2 data-i18n="cashFlowOverview">ДИНАМИКА ДЕНЕЖНОГО ПОТОКА</h2>
+        <p id="mobileChartNote" class="mobile-chart-note"></p>
+        <div class="mobile-chart-box"><canvas id="mobileCashFlowChart"></canvas></div>
+        <div id="mobileChartLegend" class="mobile-chart-legend"></div>
+      </div>
+      <button class="mobile-arrow mobile-arrow-next" type="button" data-mobile-page-target="summary" aria-label="Далее">↓</button>
+    </section>
+
+    <section id="mobileSummaryScreen" class="mobile-screen mobile-calc-screen" data-mobile-page="summary">
+      <button class="mobile-arrow mobile-arrow-prev" type="button" data-mobile-page-target="chart" aria-label="Назад">↑</button>
+      <div class="mobile-summary-stack mobile-insights-stack">
+        <div class="mobile-info-panel mobile-insights-panel">
+          <h2 data-i18n="keyInsights">КЛЮЧЕВЫЕ ВЫВОДЫ</h2>
+          <div id="mobileStandaloneInsights"></div>
+        </div>
+      </div>
+      <button class="mobile-arrow mobile-arrow-next" type="button" data-mobile-page-target="resumo" aria-label="Далее">↓</button>
+    </section>
+
+    <section id="mobileResumoScreen" class="mobile-screen mobile-calc-screen" data-mobile-page="resumo">
+      <button class="mobile-arrow mobile-arrow-prev" type="button" data-mobile-page-target="summary" aria-label="Назад">↑</button>
+      <div class="mobile-summary-stack mobile-resumo-stack">
+        <div class="mobile-info-panel mobile-resumo-panel">
+          <h2 data-i18n="summary12">ИТОГИ ЗА 12 МЕСЯЦЕВ</h2>
+          <div id="mobileStandaloneSummary"></div>
+        </div>
+      </div>
+      <button class="mobile-arrow mobile-arrow-next" type="button" data-mobile-page-target="presentation" aria-label="Далее">↓</button>
+    </section>
+
+    <section id="mobilePresentationScreen" class="mobile-screen mobile-calc-screen" data-mobile-page="presentation">
+      <button class="mobile-arrow mobile-arrow-prev" type="button" data-mobile-page-target="resumo" aria-label="Назад">↑</button>
+      <div class="mobile-presentation-stack">
+        <div class="mobile-info-panel mobile-presentation-panel">
+          <h2 id="mobilePresentationTitle">Что обсудим на консультации</h2>
+          <p id="mobilePresentationText" class="mobile-presentation-text">Специалист сервиса «Максим» представит детальный план запуска в выбранном кечематане.</p>
+          <ul id="mobilePresentationList" class="mobile-presentation-list"></ul>
+        </div>
+        <div class="mobile-info-panel mobile-final-cta-panel final-cta-section">
+          <h2 id="mobileFinalCtaTitle">Хотите проверить расчёт со специалистом?</h2>
+          <p id="mobileFinalCtaText" class="mobile-presentation-text">Оставьте заявку, чтобы обсудить условия и план запуска.</p>
+          <a id="mobileWhatsAppCta" class="mobile-whatsapp-cta" href="https://wa.me/6282372518410" target="_blank" rel="noopener noreferrer" aria-label="Связаться через WhatsApp" data-i18n-aria="contactInWhatsApp"><span class="whatsapp-cta-icon" aria-hidden="true">☎</span><span data-i18n="whatsApp">WhatsApp</span></a>
+          <button id="mobileBudgetCta" class="mobile-primary-btn mobile-budget-cta" type="button" hidden data-i18n="adjustAdvertisingBudget">Настроить рекламный бюджет</button>
+          <p id="mobileDisclaimer" class="mobile-disclaimer">Расчёт носит ориентировочный характер и не является публичной офертой.</p>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <div class="parameters-modal no-print" id="parametersModal" hidden aria-hidden="true">
+    <div class="parameters-modal-backdrop" data-close-parameters-modal></div>
+    <div class="parameters-modal-panel" role="dialog" aria-modal="true" aria-labelledby="parametersModalTitle">
+      <div class="parameters-modal-head">
+        <div>
+          <h2 id="parametersModalTitle" data-i18n="parameters">Параметры</h2>
+          <p data-i18n="parametersSubtitle">Настройте параметры сценария.</p>
+        </div>
+        <button class="parameters-modal-close" type="button" data-close-parameters-modal aria-label="Закрыть">×</button>
+      </div>
+      <div class="parameters-modal-body">
+        <label class="recommended-toggle" for="recommendedValuesCheckbox">
+          <input id="recommendedValuesCheckbox" type="checkbox" checked />
+          <span>
+            <strong data-i18n="recommendedValues">Рекомендуемые значения</strong>
+            <small data-i18n="recommendedValuesHint">Оставьте включённым для расчётных рекомендаций по выбранному кечематану.</small>
+          </span>
+        </label>
+        <div class="parameters-fields" id="parametersFields">
+          <label class="parameters-field" for="annualInvestmentBudgetInput">
+            <span data-i18n="annualDirectInvestmentBudget">Годовой бюджет рекламы</span>
+            <div class="parameters-input-affix"><span>IDR</span><input id="annualInvestmentBudgetInput" type="text" inputmode="numeric" autocomplete="off" aria-describedby="investmentBudgetAssessment" /></div>
+            <small id="investmentBudgetAssessment" class="parameter-assessment" aria-live="polite"></small>
+          </label>
+          <div class="parameters-compact-pair" role="group" aria-label="Экономические параметры поездки" data-i18n-aria="economicTripParameters">
+            <label class="parameters-field parameters-field-compact" for="averageFareParameterInput">
+              <span data-i18n="averageFareParameter">Средний чек поездки</span>
+              <div class="parameters-input-affix"><span>IDR</span><input id="averageFareParameterInput" type="number" min="8000" step="100" inputmode="numeric" aria-describedby="averageFareLimitHint" /></div>
+              <small id="averageFareLimitHint" class="parameter-limit-hint" aria-live="polite"></small>
+            </label>
+            <label class="parameters-field parameters-field-compact" for="driverCommissionParameterInput">
+              <span data-i18n="driverCommissionParameter">Комиссия с водителей</span>
+              <div class="parameters-input-affix parameters-input-percent"><input id="driverCommissionParameterInput" type="number" min="0" max="15" step="0.1" inputmode="decimal" aria-describedby="commissionLimitHint" /><span>%</span></div>
+              <small id="commissionLimitHint" class="parameter-limit-hint" aria-live="polite"></small>
+            </label>
+          </div>
+        </div>
+          <div class="business-format-options" role="group" aria-labelledby="businessFormatOptionsTitle">
+            <div class="business-format-options-title" id="businessFormatOptionsTitle" data-i18n="businessFormatOptionsTitle">Формат управления</div>
+            <label class="business-format-option" for="selfManagedParameterInput">
+              <input id="selfManagedParameterInput" type="checkbox" />
+              <span>
+                <strong data-i18n="selfManagedOption">Управлять бизнесом самостоятельно</strong>
+                <small data-i18n="selfManagedOptionHint">Вы лично выполняете функции менеджера, поэтому зарплата менеджера исключается из операционных расходов.</small>
+              </span>
+            </label>
+            <label class="business-format-option" for="ownPremisesParameterInput">
+              <input id="ownPremisesParameterInput" type="checkbox" />
+              <span>
+                <strong data-i18n="ownPremisesOption">Использовать собственное помещение</strong>
+                <small data-i18n="ownPremisesOptionHint">Работа ведётся из дома или уже имеющегося помещения, поэтому аренда офиса исключается из операционных расходов.</small>
+              </span>
+            </label>
+          </div>
+        <div id="parametersValidation" class="parameters-validation" role="alert" hidden></div>
+      </div>
+      <div class="parameters-modal-footer">
+        <button id="cancelParametersBtn" class="btn secondary" type="button" data-i18n="cancel">Отмена</button>
+        <button id="confirmParametersBtn" class="btn primary" type="button" data-i18n="confirm">Применить</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parameters-modal admin-login-modal no-print" id="adminLoginModal" hidden aria-hidden="true">
+    <div class="parameters-modal-backdrop" data-close-admin-login></div>
+    <div class="parameters-modal-panel admin-login-panel" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
+      <div class="parameters-modal-head">
+        <div>
+          <h2 id="adminLoginTitle" data-i18n="adminLoginTitle">Вход администратора</h2>
+          <p data-i18n="adminLoginSubtitle">Введите логин и пароль для управления списком кечематанов.</p>
+        </div>
+        <button class="parameters-modal-close" type="button" data-close-admin-login aria-label="Закрыть" data-i18n-aria="close">×</button>
+      </div>
+      <div class="parameters-modal-body admin-login-body">
+        <label class="admin-login-field" for="adminUsernameInput">
+          <span data-i18n="username">Логин</span>
+          <input id="adminUsernameInput" type="text" autocomplete="username" />
+        </label>
+        <label class="admin-login-field" for="adminPasswordInput">
+          <span data-i18n="password">Пароль</span>
+          <input id="adminPasswordInput" type="password" autocomplete="current-password" />
+        </label>
+        <div id="adminLoginValidation" class="parameters-validation" role="alert" hidden></div>
+        <div class="admin-security-note" data-i18n="adminSecurityNote">В статической версии авторизация защищает только интерфейс. Для общего защищённого управления на всех устройствах потребуется серверная авторизация.</div>
+      </div>
+      <div class="parameters-modal-footer">
+        <button class="btn secondary" type="button" data-close-admin-login data-i18n="cancel">Отмена</button>
+        <button id="adminLoginSubmit" class="btn primary" type="button" data-i18n="signIn">Войти</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="parameters-modal admin-cities-modal no-print" id="adminCitiesModal" hidden aria-hidden="true">
+    <div class="parameters-modal-backdrop" data-close-admin-cities></div>
+    <div class="parameters-modal-panel admin-cities-panel" role="dialog" aria-modal="true" aria-labelledby="adminCitiesTitle">
+      <div class="parameters-modal-head admin-cities-head">
+        <div>
+          <h2 id="adminCitiesTitle">Управление кечематанами</h2>
+          <p>Деактивированные записи не отображаются обычным пользователям. Изменения сохраняются в этом браузере.</p>
+        </div>
+        <button class="parameters-modal-close" type="button" data-close-admin-cities aria-label="Закрыть">×</button>
+      </div>
+      <div class="parameters-modal-body admin-cities-body">
+        <section class="admin-fee-rules-card" aria-labelledby="adminFeeRulesTitle">
+          <div class="admin-section-heading admin-fee-rules-heading">
+            <div>
+              <h3 id="adminFeeRulesTitle">Правила паушального взноса</h3>
+              <p>Задайте цену для каждого порога населения. Новое правило сохраняется отдельно и применяется к списку только после подтверждения массового обновления.</p>
+            </div>
+            <div class="admin-fee-rules-actions">
+              <button id="adminAddFeeRule" class="btn secondary" type="button">Добавить порог</button>
+              <button id="adminSaveFeeRules" class="btn secondary" type="button">Сохранить правила</button>
+              <button id="adminApplyFeeRules" class="btn primary" type="button">Применить ко всем</button>
+            </div>
+          </div>
+          <div class="admin-fee-rules-table-wrap">
+            <table class="admin-fee-rules-table">
+              <thead><tr><th>Население от</th><th>Диапазон</th><th>Паушальный взнос без НДС, IDR</th><th>Записей</th><th></th></tr></thead>
+              <tbody id="adminFeeRulesBody"></tbody>
+            </table>
+          </div>
+          <div class="admin-fee-rules-meta">
+            <span id="adminFeeRulesStatus">Цены в списке не изменены.</span>
+            <button id="adminResetFeeRules" class="admin-link-button" type="button">Вернуть стандартные пороги</button>
+          </div>
+        </section>
+
+        <section class="admin-add-city-card" aria-labelledby="adminAddCityTitle">
+          <div class="admin-section-heading">
+            <div>
+              <h3 id="adminAddCityTitle">Добавить кечематан</h3>
+              <p>Новая запись сразу станет доступна обычным пользователям.</p>
+            </div>
+          </div>
+          <div class="admin-add-city-grid">
+            <label><span>Провинция</span><input id="adminNewCityState" type="text" autocomplete="address-level1" placeholder="Например, Aceh"></label>
+            <label><span>Кечематан</span><input id="adminNewCityName" type="text" autocomplete="address-level2" placeholder="Название"></label>
+            <label><span>Население</span><input id="adminNewCityPopulation" type="number" min="1" step="1" inputmode="numeric" placeholder="100000"></label>
+            <label><span>Паушальный взнос без НДС, IDR</span><input id="adminNewCityPayment" type="number" min="0" step="1000" inputmode="numeric" placeholder="По правилу"><small id="adminNewCityPaymentHint" class="admin-field-hint">Оставьте пустым для автоматического расчёта.</small></label>
+            <button id="adminAddCitySubmit" class="btn primary admin-add-city-button" type="button">Добавить</button>
+          </div>
+        </section>
+
+        <section class="admin-city-management-card" aria-labelledby="adminCityListTitle">
+          <div class="admin-section-heading admin-list-heading">
+            <div>
+              <h3 id="adminCityListTitle">Список кечематанов</h3>
+              <p>Используйте переключатель, чтобы показать или скрыть запись для обычного пользователя.</p>
+            </div>
+            <div id="adminCityStats" class="admin-city-stats"></div>
+          </div>
+          <div class="admin-city-toolbar">
+            <label class="admin-search-field"><span>Поиск</span><input id="adminCitySearch" type="search" placeholder="Кечематан или провинция"></label>
+            <label><span>Провинция</span><select id="adminCityRegionFilter"><option value="">Все провинции</option></select></label>
+            <label class="admin-hidden-filter"><input id="adminHiddenOnly" type="checkbox"><span>Только деактивированные</span></label>
+            <div id="adminCityResultCount" class="admin-result-count"></div>
+          </div>
+          <div class="admin-cities-table-wrap">
+            <table class="admin-cities-table">
+              <thead><tr><th>Отображение</th><th>Провинция</th><th>Кечематан</th><th>Население</th><th>Паушальный взнос</th></tr></thead>
+              <tbody id="adminCitiesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+        <div id="adminCitiesMessage" class="admin-message" aria-live="polite"></div>
+      </div>
+      <div class="parameters-modal-footer admin-cities-footer">
+        <button class="btn secondary" type="button" data-admin-reset>Восстановить исходный список</button>
+        <div class="admin-footer-actions">
+          <button class="btn secondary" type="button" data-admin-logout>Выйти из режима администратора</button>
+          <button class="btn primary" type="button" data-close-admin-cities>Готово</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="section-help-modal" id="sectionHelpModal" hidden aria-hidden="true">
+    <div class="section-help-backdrop" data-close-section-help></div>
+    <div class="section-help-panel" role="dialog" aria-modal="true" aria-labelledby="sectionHelpTitle" aria-describedby="sectionHelpSubtitle">
+      <div class="section-help-head">
+        <div class="section-help-heading-group">
+          <div class="section-help-eyebrow" id="sectionHelpEyebrow" data-i18n="sectionHelpEyebrow">СПРАВОЧНИК ПОКАЗАТЕЛЕЙ</div>
+          <div class="section-help-title-row">
+            <span class="section-help-icon" id="sectionHelpIcon" aria-hidden="true"></span>
+            <div>
+              <h2 id="sectionHelpTitle"></h2>
+              <p id="sectionHelpSubtitle"></p>
+            </div>
+          </div>
+        </div>
+        <button class="section-help-close" type="button" data-close-section-help aria-label="Закрыть пояснения" data-i18n-aria="closeSectionHelp">×</button>
+      </div>
+      <div class="section-help-currency" id="sectionHelpCurrency" data-i18n="sectionCurrencyNote">Все суммы в IDR</div>
+      <div class="section-help-list" id="sectionHelpList"></div>
+    </div>
+  </div>
+
+
+
+  <div class="advertising-modal" id="advertisingModal" hidden aria-hidden="true">
+    <div class="advertising-backdrop" data-close-advertising></div>
+    <div class="advertising-panel" role="dialog" aria-modal="true" aria-labelledby="advertisingTitle">
+      <div class="advertising-head">
+        <div class="advertising-title-group">
+          <span class="advertising-head-icon" aria-hidden="true">📣</span>
+          <div>
+            <div class="advertising-eyebrow" data-i18n="advertisingGuideEyebrow">РЕКЛАМА И ПРОДВИЖЕНИЕ</div>
+            <h2 id="advertisingTitle" data-i18n="advertisingGuideTitle">Реклама</h2>
+          </div>
+        </div>
+        <button class="advertising-close" type="button" data-close-advertising aria-label="Закрыть" data-i18n-aria="close">×</button>
+      </div>
+      <div id="advertisingModalBody" class="advertising-body"></div>
+    </div>
+  </div>
+
+
+
+  <div class="advertising-modal" id="detailModal" hidden aria-hidden="true">
+    <div class="advertising-backdrop" data-close-detail-modal></div>
+    <div class="advertising-panel" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+      <div class="advertising-head">
+        <div class="advertising-title-group">
+          <span class="advertising-head-icon" id="detailModalHeadIcon" aria-hidden="true">📦</span>
+          <div>
+            <div class="advertising-eyebrow" id="detailModalEyebrow">ПОДРОБНЕЕ</div>
+            <h2 id="detailModalTitle">Подробности</h2>
+          </div>
+        </div>
+        <button class="advertising-close" type="button" data-close-detail-modal aria-label="Закрыть" data-i18n-aria="close">×</button>
+      </div>
+      <div id="detailModalBody" class="advertising-body"></div>
+    </div>
+  </div>
+
+  <div class="chart-modal" id="chartModal" hidden aria-hidden="true">
+    <div class="chart-modal-backdrop" data-close-chart-modal></div>
+    <div class="chart-modal-panel" role="dialog" aria-modal="true" aria-labelledby="chartModalTitle">
+      <div class="chart-modal-head">
+        <div>
+          <h2 id="chartModalTitle" data-i18n="cashFlowOverview">ДИНАМИКА ДЕНЕЖНОГО ПОТОКА</h2>
+          <p data-i18n="chartSubtitle">Чистая прибыль партнёра и накопленный результат</p>
+        </div>
+        <button class="chart-modal-close" type="button" data-close-chart-modal aria-label="Закрыть">×</button>
+      </div>
+      <div class="chart-modal-box">
+        <canvas id="cashFlowChartLarge"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="localization.js"></script>
+  <script src="cities.js"></script>
+  <script src="validation.js"></script>
+  <script src="storage.js"></script>
+  <script src="financial-engine.js"></script>
+  <script src="scenario-manager.js"></script>
+  <script src="animation.js"></script>
+  <script src="charts.js"></script>
+  <script src="ui-renderer.js"></script>
+  <script src="admin-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
