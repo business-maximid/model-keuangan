@@ -28,6 +28,13 @@
             </svg>
             <span class="top-action-label" data-i18n="parameters">Параметры</span>
           </button>
+          <button id="realExamplesBtn" class="btn icon-btn top-action-btn top-action-real-examples" type="button" title="Реальные примеры" aria-label="Реальные примеры" data-i18n-title="realExamples" data-i18n-aria="realExamples">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>
+              <path d="M5 7l5-4 6 6 5-5"/>
+            </svg>
+            <span class="top-action-label" data-i18n="realExamples">Реальные примеры</span>
+          </button>
           <button id="changeCityBtn" class="btn icon-btn top-action-btn top-action-city" type="button" title="Сменить кечематан" aria-label="Сменить кечематан" data-i18n-title="changeCity" data-i18n-aria="changeCity">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/>
@@ -499,6 +506,39 @@
     </div>
   </div>
 
+  <div class="real-examples-modal" id="realExamplesModal" hidden aria-hidden="true">
+    <div class="real-examples-backdrop" data-real-close="realExamplesModal"></div>
+    <div class="real-examples-panel" role="dialog" aria-modal="true" aria-labelledby="realExamplesTitle">
+      <div class="real-examples-head">
+        <div>
+          <div class="real-examples-eyebrow" data-i18n="realExamplesEyebrow">ФАКТИЧЕСКИЕ ДАННЫЕ ДЕЙСТВУЮЩИХ ПРОЕКТОВ</div>
+          <h2 id="realExamplesTitle" data-i18n="realExamplesTitle">Реальные примеры</h2>
+          <p data-i18n="realExamplesSubtitle">Сравните успешные проекты и кейсы, где ошибки управления не позволили окупить вложения.</p>
+        </div>
+        <button class="real-examples-close" type="button" data-real-close="realExamplesModal" aria-label="Закрыть" data-i18n-aria="close">×</button>
+      </div>
+      <div id="realExamplesBody" class="real-examples-body"></div>
+    </div>
+  </div>
+
+  <div class="real-examples-modal" id="realCaseModal" hidden aria-hidden="true">
+    <div class="real-examples-backdrop" data-real-close="realCaseModal"></div>
+    <div class="real-examples-panel real-case-panel" role="dialog" aria-modal="true" aria-labelledby="realCaseTitle">
+      <div class="real-case-head">
+        <div>
+          <div class="real-examples-eyebrow" data-i18n="realExamplesCaseEyebrow">РЕАЛЬНЫЙ КЕЙС</div>
+          <h2 id="realCaseTitle"></h2>
+          <p id="realCaseSubtitle"></p>
+        </div>
+        <div class="real-case-head-actions">
+          <button class="btn secondary real-case-back" type="button" data-real-back>← <span data-i18n="realExamplesAllCases">Все примеры</span></button>
+          <button class="real-examples-close" type="button" data-real-close="realCaseModal" aria-label="Закрыть" data-i18n-aria="close">×</button>
+        </div>
+      </div>
+      <div id="realCaseBody" class="real-examples-body real-case-body"></div>
+    </div>
+  </div>
+
   <div class="chart-modal" id="chartModal" hidden aria-hidden="true">
     <div class="chart-modal-backdrop" data-close-chart-modal></div>
     <div class="chart-modal-panel" role="dialog" aria-modal="true" aria-labelledby="chartModalTitle">
@@ -526,5 +566,6 @@
   <script src="ui-renderer.js"></script>
   <script src="admin-config.js"></script>
   <script src="app.js"></script>
+  <script src="real-examples.js"></script>
 </body>
 </html>

@@ -119,9 +119,17 @@ const App=(()=>{
         : (isCustom?Number(city.initialPayment):paymentForPopulation(city.population)),
       isCustom
     });
-    cityCache=baseCities()
+    const merged=baseCities()
       .map(city=>withEffectivePayment(city,false))
-      .concat(cityOverrides.added.map(city=>withEffectivePayment(city,true)))
+      .concat(cityOverrides.added.map(city=>withEffectivePayment(city,true)));
+    const seenLocations=new Set();
+    cityCache=merged
+      .filter(city=>{
+        const key=`${String(city.state||'').trim().toLocaleLowerCase('id-ID')}|${String(city.city||'').trim().toLocaleLowerCase('id-ID')}`;
+        if(seenLocations.has(key))return false;
+        seenLocations.add(key);
+        return true;
+      })
       .sort((a,b)=>a.state.localeCompare(b.state,'id-ID')||a.city.localeCompare(b.city,'id-ID')||Number(a.population)-Number(b.population));
     return cityCache;
   }
